@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:info_kit/info_kit.dart';
 import 'package:info_kit/src/data/flavor.dart';
 import 'package:info_kit/src/data/size.dart';
@@ -19,6 +20,10 @@ class InfoKit {
     String flavorEnvKey = DefaultInfoFlavor.flavorEnvKey,
     List<InfoSize> sizes = DefaultInfoSize.sizes,
     InfoSize fallbackSize = DefaultInfoSize.fallbackSize,
+    bool envEnabled = true,
+    bool envFlavorEnabled = true,
+    bool envFlavorPerPlatformEnabled = true,
+    String envFolder = 'env',
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     PackageInfo info = await PackageInfo.fromPlatform();
@@ -35,6 +40,21 @@ class InfoKit {
       String flavor = String.fromEnvironment(flavorEnvKey);
       _flavor = flavors.firstWhere((f) => f.name == flavor,
           orElse: () => fallbackFlavor);
+    }
+
+    if (envEnabled) {
+      Map<String, String> env = {};
+      if (envFlavorPerPlatformEnabled) {
+        await dotenv.load(
+            fileName: '$envFolder/${platform.name}/.env.${flavor.name}');
+        env.addAll(dotenv.env);
+      }
+      if (envFlavorEnabled) {
+        await dotenv.load(
+            fileName: '$envFolder/.env${flavor.name}', mergeWith: env);
+        env.addAll(dotenv.env);
+      }
+      await dotenv.load(fileName: '$envFolder/.env', mergeWith: env);
     }
   }
 
