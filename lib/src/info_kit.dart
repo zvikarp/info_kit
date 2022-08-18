@@ -86,13 +86,6 @@ class InfoKit {
   static InfoOS get os =>
       Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
 
-  // type
-  static InfoType get type => (os == InfoOS.android || os == InfoOS.ios)
-      ? InfoType.mobile
-      : (os == InfoOS.macos || os == InfoOS.windows)
-          ? InfoType.desktop
-          : InfoType.unknown;
-
   // flavor
   static late InfoFlavor _flavor;
   static InfoFlavor get flavor => _flavor;
