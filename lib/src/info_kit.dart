@@ -24,6 +24,8 @@ class InfoKit {
     PackageInfo info = await PackageInfo.fromPlatform();
     _buildNumber = int.parse(info.buildNumber);
     _version = info.version;
+    _packageName = info.packageName;
+    _appName = info.appName;
     _sizes = sizes;
     _size = fallbackSize;
 
@@ -85,4 +87,12 @@ class InfoKit {
   // version
   static late String _version;
   static String get version => _version;
+
+  // package name
+  static late String _packageName;
+  static String get packageName => _packageName;
+
+  // app name
+  static late String _appName;
+  static String get appName => _appName;
 }
