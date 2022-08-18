@@ -1,9 +1,8 @@
-enum InfoSize {
-  phone(480),
-  tablet(768),
-  desktop(1024),
-  unknown(0);
+import 'package:flutter/material.dart';
 
-  final int px;
-  const InfoSize(this.px);
+class InfoSize {
+  final String name;
+  final BoxConstraints constraints;
+
+  const InfoSize(this.name, this.constraints);
 }

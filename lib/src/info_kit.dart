@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:info_kit/info_kit.dart';
 import 'package:info_kit/src/data/flavor.dart';
+import 'package:info_kit/src/data/size.dart';
 import 'package:info_kit/src/utils/locale_extension.dart';
 import 'package:universal_io/io.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'utils/string_extension.dart';
+import 'utils/box_constrains_extension.dart';
 
 class InfoKit {
   InfoKit._();
@@ -15,11 +17,15 @@ class InfoKit {
     List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
     InfoFlavor fallbackFlavor = DefaultInfoFlavor.fallbackFlavor,
     String flavorEnvKey = DefaultInfoFlavor.flavorEnvKey,
+    List<InfoSize> sizes = DefaultInfoSize.sizes,
+    InfoSize fallbackSize = DefaultInfoSize.fallbackSize,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     PackageInfo info = await PackageInfo.fromPlatform();
     _buildNumber = int.parse(info.buildNumber);
     _version = info.version;
+    _sizes = sizes;
+    _size = fallbackSize;
 
     if (flavorEnabled) {
       // as there is no built in flavor support for web, we pass the flavor on
@@ -31,18 +37,14 @@ class InfoKit {
   }
 
   // screen size
-  static InfoSize _size = InfoSize.unknown;
+  static late List<InfoSize> _sizes;
+  static late InfoSize _size;
 
   static void setSize(Size size) {
-    final double width = size.width;
-    for (InfoSize w in InfoSize.values) {
-      if (width <= w.px) {
-        _size = w;
-        return;
-      }
-    }
-    _size = InfoSize.desktop;
+    _size = _sizes.firstWhere((s) => s.constraints.contains(size),
+        orElse: () => _size);
   }
+
   static InfoSize get size => _size;
 
   // origin
