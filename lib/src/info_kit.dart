@@ -37,7 +37,8 @@ class InfoKit {
     if (flavorEnabled) {
       // as there is no built in flavor support for web, we pass the flavor on
       // run as `--dart-define=flavor=<FLAVOR>`
-      String flavor = String.fromEnvironment(flavorEnvKey);
+      String flavor =
+          const String.fromEnvironment(DefaultInfoFlavor.flavorEnvKey);
       _flavor = flavors.firstWhere((f) => f.name == flavor,
           orElse: () => fallbackFlavor);
     }
@@ -51,7 +52,7 @@ class InfoKit {
       }
       if (envFlavorEnabled) {
         await dotenv.load(
-            fileName: '$envFolder/.env${flavor.name}', mergeWith: env);
+            fileName: '$envFolder/.env.${flavor.name}', mergeWith: env);
         env.addAll(dotenv.env);
       }
       await dotenv.load(fileName: '$envFolder/.env', mergeWith: env);
@@ -62,7 +63,7 @@ class InfoKit {
   static late List<InfoSize> _sizes;
   static late InfoSize _size;
 
-  static void setSize(Size size) {
+  static void setConstrains(BoxConstraints size) {
     _size = _sizes.firstWhere((s) => s.constraints.contains(size),
         orElse: () => _size);
   }
