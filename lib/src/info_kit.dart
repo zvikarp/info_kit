@@ -58,7 +58,7 @@ class InfoKit {
     }
   }
 
-  // screen size
+  /// size of the device, based on a list of supported sizes
   static late List<InfoSize> _sizes;
   static late InfoSize _size;
 
@@ -69,43 +69,43 @@ class InfoKit {
 
   static InfoSize get size => _size;
 
-  // origin
+  /// origin url on web platform, otherwise an empty string
   static String get origin => platform.isWeb ? Uri.base.origin : '';
 
-  // locale
+  /// device's language
   static String get _localeName => Platform.localeName;
   static Locale get locale => LocaleExtension.fromString(_localeName);
 
-  // platform
+  /// device platform, (ios app, web app, macos app), etc
   static InfoPlatform get platform {
     if (kIsWeb) return InfoPlatform.web;
     return os.name.toEnum(InfoPlatform.values) ?? InfoPlatform.unknown;
   }
 
-  // os
+  /// device's operating system
   static InfoOS get os =>
       Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
 
-  // flavor
+  //. build flavor
   static late InfoFlavor _flavor;
   static InfoFlavor get flavor => _flavor;
 
-  // mode
+  /// if release build or debug
   static InfoMode get mode => kDebugMode ? InfoMode.debug : InfoMode.release;
 
-  // build number
+  /// build number
   static late int _buildNumber;
   static int get buildNumber => _buildNumber;
 
-  // version
+  /// version
   static late String _version;
   static String get version => _version;
 
-  // package name
+  /// package name
   static late String _packageName;
   static String get packageName => _packageName;
 
-  // app name
+  /// app name
   static late String _appName;
   static String get appName => _appName;
 }

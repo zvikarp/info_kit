@@ -1,6 +1,8 @@
 # info_kit
 
-Provides all the basic info about your application.
+[![pub package](https://img.shields.io/pub/v/info_kit.svg)](https://pub.dev/packages/info_kit)
+
+Provides all basic info about your application.
 
 ## Installation
 
@@ -31,25 +33,25 @@ InfoKit.init({
 
 ```dart
 
-// size of the device, based on a list of supported sizes.
+// size of the device, based on a list of supported sizes
 InfoSize size = InfoKit.size;
 
-// origin url on web platform, otherwise an empty string.
+// origin url on web platform, otherwise an empty string
 String origin = InfoKit.origin;
 
-// device's language.
+// device's language
 Locale locale = InfoKit.locale;
 
-// device platform, (ios app, web app, desktop app), etc.
+// device platform, (ios app, web app, macos app), etc
 InfoPlatform platform = InfoKit.platform;
 
-// device's operating system.
+// device's operating system
 InfoOS os = InfoKit.os;
 
-// build flavor.
+// build flavor
 InfoFlavor flavor = InfoKit.flavor;
 
-// if release build or debug.
+// if release build or debug
 InfoMode mode = InfoKit.mode;
 
 int buildNumber = InfoKit.buildNumber;
