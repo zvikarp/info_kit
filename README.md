@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/info_kit.svg)](https://pub.dev/packages/info_kit)
 
-Provides all basic info about your application.
+Provides all basic info about your application. App flavor, Version, Device size, Flavor specific environment variables, and more.
 
 ## Installation
 

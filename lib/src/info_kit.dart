@@ -10,9 +10,26 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'utils/string_extension.dart';
 import 'utils/box_constrains_extension.dart';
 
+/// Provides all basic info about your application. App flavor, Version, Device
+/// size, Flavor specific environment variables, and more.
 class InfoKit {
   InfoKit._();
 
+  /// Initializes the [InfoKit]. All parameters are optional.
+  ///
+  /// If the app doesn't use flavors, set [flavorEnabled] to false. otherwise,
+  /// provide a list of [flavors] that the app uses, there is a default list
+  /// set. Set the [fallbackFlavor] to a deafult flavor.
+  ///
+  /// Set a list of suppoerted [sizes] if the app uses different sizes, and a
+  /// [fallbackSize] to a default size.
+  ///
+  /// If the app doesn't use environment variables, set [envEnabled] to false.
+  /// If the app don't use specific environment variables for each flavor, set
+  /// [envFlavorEnabled] to false. If the app doesn't use specific environment
+  /// variables for each platform, set [envFlavorPerPlatformEnabled] to false.
+  /// Set the [envFolder] to the folder where the environment variables are
+  /// stored.
   static Future<void> init({
     bool flavorEnabled = true,
     List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
@@ -59,22 +76,22 @@ class InfoKit {
   }
 
   /// size of the device, based on a list of supported sizes
+  static InfoSize get size => _size;
   static late List<InfoSize> _sizes;
   static late InfoSize _size;
 
-  static void setConstrains(BoxConstraints size) {
-    _size = _sizes.firstWhere((s) => s.constraints.contains(size),
+  /// set the size of the device based on given []
+  static void setConstrains(BoxConstraints constrains) {
+    _size = _sizes.firstWhere((s) => s.constraints.contains(constrains),
         orElse: () => _size);
   }
-
-  static InfoSize get size => _size;
 
   /// origin url on web platform, otherwise an empty string
   static String get origin => platform.isWeb ? Uri.base.origin : '';
 
   /// device's language
-  static String get _localeName => Platform.localeName;
   static Locale get locale => LocaleExtension.fromString(_localeName);
+  static String get _localeName => Platform.localeName;
 
   /// device platform, (ios app, web app, macos app), etc
   static InfoPlatform get platform {
@@ -86,26 +103,26 @@ class InfoKit {
   static InfoOS get os =>
       Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
 
-  //. build flavor
-  static late InfoFlavor _flavor;
+  /// build flavor of the app
   static InfoFlavor get flavor => _flavor;
+  static late InfoFlavor _flavor;
 
   /// if release build or debug
   static InfoMode get mode => kDebugMode ? InfoMode.debug : InfoMode.release;
 
-  /// build number
-  static late int _buildNumber;
+  /// build number of the app (ex. 24)
   static int get buildNumber => _buildNumber;
+  static late int _buildNumber;
 
-  /// version
-  static late String _version;
+  /// version of the app (ex. 1.0.0)
   static String get version => _version;
+  static late String _version;
 
-  /// package name
-  static late String _packageName;
+  /// package name of the app (ex. com.example.app)
   static String get packageName => _packageName;
+  static late String _packageName;
 
-  /// app name
-  static late String _appName;
+  /// app name of the app (ex. My App)
   static String get appName => _appName;
+  static late String _appName;
 }
