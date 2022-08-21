@@ -114,3 +114,12 @@ Set different environment variables for different flavors and different flavors!
 1. The merging of the environment variables is done so that the more specific environment variable overrides the less specific environment variable. Don't forget to add the folders as assets to your `pubspec.yaml` file.
 1. The variables can now be accessed using the `flutter_dotenv` package.
 
+## Screenshots
+
+
+![info_kit_android](https://user-images.githubusercontent.com/13397207/185792458-e9cd913d-cfd1-48f6-b896-ea53b94e067b.png)
+![info_kit_macos](https://user-images.githubusercontent.com/13397207/185792492-fac0c9ae-426c-45e1-8aac-19b27fce4d52.gif)
+![info_kit_web](https://user-images.githubusercontent.com/13397207/185792493-5414c2f3-09b9-46f8-a972-ddd84145144f.png)
+
+
+
