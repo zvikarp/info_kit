@@ -17,7 +17,6 @@ class InfoKit {
     bool flavorEnabled = true,
     List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
     InfoFlavor fallbackFlavor = DefaultInfoFlavor.fallbackFlavor,
-    String flavorEnvKey = DefaultInfoFlavor.flavorEnvKey,
     List<InfoSize> sizes = DefaultInfoSize.sizes,
     InfoSize fallbackSize = DefaultInfoSize.fallbackSize,
     bool envEnabled = true,
