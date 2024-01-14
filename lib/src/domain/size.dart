@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-class InfoSize {
-  /// The name of the size.
-  final String name;
+enum InfoSize {
+  phone(BoxConstraints(maxWidth: 480)),
+  tablet(BoxConstraints(maxWidth: 768)),
+  desktop(BoxConstraints(minWidth: 769));
 
-  /// The constraints of the size.
   final BoxConstraints constraints;
 
-  const InfoSize(this.name, this.constraints);
+  const InfoSize(this.constraints);
+
+  bool get isPhone => this == InfoSize.phone;
+  bool get isTablet => this == InfoSize.tablet;
+  bool get isDesktop => this == InfoSize.desktop;
 }

@@ -20,7 +20,6 @@ InfoKit.init({
   flavorEnabled: true,
   List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
   InfoFlavor fallbackFlavor = DefaultInfoFlavor.fallbackFlavor,
-  List<InfoSize> sizes = DefaultInfoSize.sizes,
   InfoSize fallbackSize = DefaultInfoSize.fallbackSize,
   bool envEnabled = true,
   bool envFlavorEnabled = true,

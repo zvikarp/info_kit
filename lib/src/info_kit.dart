@@ -2,13 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:info_kit/info_kit.dart';
-import 'package:info_kit/src/data/flavor.dart';
-import 'package:info_kit/src/data/size.dart';
 import 'package:info_kit/src/utils/locale_extension.dart';
 import 'package:universal_io/io.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'utils/string_extension.dart';
 import 'utils/box_constrains_extension.dart';
+import 'locale/locale_default.dart'
+    if (dart.library.html) 'locale/locale_web.dart';
 
 /// Provides all basic info about your application. App flavor, Version, Device
 /// size, Flavor specific environment variables, and more.
@@ -19,9 +19,9 @@ class InfoKit {
   ///
   /// If the app doesn't use flavors, set [flavorEnabled] to false. otherwise,
   /// provide a list of [flavors] that the app uses, there is a default list
-  /// set. Set the [fallbackFlavor] to a deafult flavor.
+  /// set. Set the [fallbackFlavor] to a default flavor.
   ///
-  /// Set a list of suppoerted [sizes] if the app uses different sizes, and a
+  /// Set a list of supported [sizes] if the app uses different sizes, and a
   /// [fallbackSize] to a default size.
   ///
   /// If the app doesn't use environment variables, set [envEnabled] to false.
@@ -34,8 +34,7 @@ class InfoKit {
     bool flavorEnabled = true,
     List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
     InfoFlavor fallbackFlavor = DefaultInfoFlavor.fallbackFlavor,
-    List<InfoSize> sizes = DefaultInfoSize.sizes,
-    InfoSize fallbackSize = DefaultInfoSize.fallbackSize,
+    InfoSize fallbackSize = InfoSize.phone,
     bool envEnabled = true,
     bool envFlavorEnabled = true,
     bool envFlavorPerPlatformEnabled = true,
@@ -47,7 +46,6 @@ class InfoKit {
     _version = info.version;
     _packageName = info.packageName;
     _appName = info.appName;
-    _sizes = sizes;
     _size = fallbackSize;
 
     if (flavorEnabled) {
@@ -77,12 +75,16 @@ class InfoKit {
 
   /// size of the device, based on a list of supported sizes
   static InfoSize get size => _size;
-  static late List<InfoSize> _sizes;
   static late InfoSize _size;
+
+  static BoxConstraints? _screen;
+  static BoxConstraints? get screen => _screen;
 
   /// set the size of the device based on given []
   static void setConstrains(BoxConstraints constrains) {
-    _size = _sizes.firstWhere((s) => s.constraints.contains(constrains),
+    _screen = constrains;
+    _size = InfoSize.values.firstWhere(
+        (s) => s.constraints.contains(constrains),
         orElse: () => _size);
   }
 
@@ -90,8 +92,8 @@ class InfoKit {
   static String get origin => platform.isWeb ? Uri.base.origin : '';
 
   /// device's language
-  static Locale get locale => LocaleExtension.fromString(_localeName);
-  static String get _localeName => Platform.localeName;
+  static Locale get locale =>
+      LocaleExtension.fromString(LocalePlatform.locale ?? '');
 
   /// device platform, (ios app, web app, macos app), etc
   static InfoPlatform get platform {
@@ -125,4 +127,12 @@ class InfoKit {
   /// app name of the app (ex. My App)
   static String get appName => _appName;
   static late String _appName;
+
+  static String? storeUrl(String? appleAppId) => InfoPlatformData(
+        android: 'https://play.google.com/store/apps/details?id=$packageName',
+        ios: appleAppId != null
+            ? 'https://apps.apple.com/app/$appleAppId'
+            : null,
+        fallback: null,
+      ).value;
 }
