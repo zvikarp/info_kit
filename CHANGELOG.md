@@ -1,3 +1,8 @@
+## 1.2.0+3
+
+### Changed
+* Changed `Size` to a class instead of an enum
+* 
 ## 1.1.0+2
 
 ### Changed

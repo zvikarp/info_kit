@@ -6,7 +6,6 @@ import 'package:info_kit/src/utils/locale_extension.dart';
 import 'package:universal_io/io.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'utils/string_extension.dart';
-import 'utils/box_constrains_extension.dart';
 import 'locale/locale_default.dart'
     if (dart.library.html) 'locale/locale_web.dart';
 
@@ -34,7 +33,8 @@ class InfoKit {
     bool flavorEnabled = true,
     List<InfoFlavor> flavors = DefaultInfoFlavor.flavors,
     InfoFlavor fallbackFlavor = DefaultInfoFlavor.fallbackFlavor,
-    InfoSize fallbackSize = InfoSize.phone,
+    InfoSizes sizes = const InfoSizes(),
+    InfoSize fallbackSize = DefaultInfoSize.phone,
     bool envEnabled = true,
     bool envFlavorEnabled = true,
     bool envFlavorPerPlatformEnabled = true,
@@ -47,6 +47,7 @@ class InfoKit {
     _packageName = info.packageName;
     _appName = info.appName;
     _size = fallbackSize;
+    _sizes = sizes;
 
     if (flavorEnabled) {
       // as there is no built in flavor support for web, we pass the flavor on
@@ -76,6 +77,8 @@ class InfoKit {
   /// size of the device, based on a list of supported sizes
   static InfoSize get size => _size;
   static late InfoSize _size;
+  static InfoSizes get sizes => _sizes;
+  static late InfoSizes _sizes;
 
   static BoxConstraints? _screen;
   static BoxConstraints? get screen => _screen;
@@ -83,9 +86,7 @@ class InfoKit {
   /// set the size of the device based on given []
   static void setConstrains(BoxConstraints constrains) {
     _screen = constrains;
-    _size = InfoSize.values.firstWhere(
-        (s) => s.constraints.contains(constrains),
-        orElse: () => _size);
+    _size = _sizes.getSize(constrains, DefaultInfoSize.fallbackSize);
   }
 
   /// origin url on web platform, otherwise an empty string
