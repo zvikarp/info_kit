@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:info_kit/info_kit.dart';
+import 'package:info_kit/src/utils/expression_parser.dart';
 import 'package:info_kit/src/utils/locale_extension.dart';
 import 'package:universal_io/io.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -48,6 +49,10 @@ class InfoKit {
     _appName = info.appName;
     _size = fallbackSize;
     _sizes = sizes;
+    _platform = kIsWeb
+        ? InfoPlatform.web
+        : (os.name.toEnum(InfoPlatform.values) ?? InfoPlatform.unknown);
+    _os = Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
 
     if (flavorEnabled) {
       // as there is no built in flavor support for web, we pass the flavor on
@@ -97,14 +102,12 @@ class InfoKit {
       LocaleExtension.fromString(LocalePlatform.locale ?? '');
 
   /// device platform, (ios app, web app, macos app), etc
-  static InfoPlatform get platform {
-    if (kIsWeb) return InfoPlatform.web;
-    return os.name.toEnum(InfoPlatform.values) ?? InfoPlatform.unknown;
-  }
+  static InfoPlatform get platform => _platform;
+  static late InfoPlatform _platform;
 
   /// device's operating system
-  static InfoOS get os =>
-      Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
+  static InfoOS get os => _os;
+  static late InfoOS _os;
 
   /// build flavor of the app
   static InfoFlavor get flavor => _flavor;
@@ -136,4 +139,46 @@ class InfoKit {
             : null,
         fallback: null,
       ).value;
+
+  static bool? isBuildSupported(String expression, {String variable = 'x'}) {
+    ExpressionParser parser = ExpressionParser(variable: variable);
+    return parser.evaluate(expression, buildNumber);
+  }
+
+  @visibleForTesting
+  static void setTestValues({
+    int? buildNumber,
+    String? version,
+    String? packageName,
+    String? appName,
+    InfoPlatform? platform,
+    InfoFlavor? flavor,
+    InfoOS? os,
+    InfoSizes? sizes,
+    InfoSize? size,
+  }) {
+    if (buildNumber != null) _buildNumber = buildNumber;
+    if (version != null) _version = version;
+    if (packageName != null) _packageName = packageName;
+    if (appName != null) _appName = appName;
+    if (flavor != null) _flavor = flavor;
+    if (platform != null) _platform = platform;
+    if (os != null) _os = os;
+    if (sizes != null) _sizes = sizes;
+    if (size != null) _size = size;
+  }
+
+  @visibleForTesting
+  static void resetTestValues() {
+    // Reset to default values or null
+    _buildNumber = 0;
+    _version = '';
+    _packageName = '';
+    _appName = '';
+    _flavor = DefaultInfoFlavor.fallbackFlavor;
+    _platform = InfoPlatform.unknown;
+    _os = InfoOS.unknown;
+    _sizes = InfoSizes();
+    _size = DefaultInfoSize.fallbackSize;
+  }
 }

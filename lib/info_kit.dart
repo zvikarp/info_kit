@@ -1,5 +1,3 @@
-library info_kit;
-
 export 'src/info_kit.dart';
 
 export 'src/domain/flavor.dart';

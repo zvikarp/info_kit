@@ -27,7 +27,7 @@ class InfoPlatformData<T> {
         };
 
   factory InfoPlatformData.fromMap({
-    required fallback,
+    required T fallback,
     Map<String, T>? map,
   }) {
     Map<InfoPlatform, T>? platformData = map?.map<InfoPlatform, T>(
@@ -47,6 +47,23 @@ class InfoPlatformData<T> {
       web: platformData?[InfoPlatform.web],
       unknown: platformData?[InfoPlatform.unknown],
     );
+  }
+
+  factory InfoPlatformData.fromAny(dynamic data) {
+    if (data is Map) {
+      if (data.isEmpty) throw ArgumentError('data cannot be empty');
+      if (!data.containsKey('fallback')) {
+        throw ArgumentError('data must contain a fallback value');
+      }
+      return InfoPlatformData.fromMap(
+        fallback: data['fallback'],
+        map: data.cast<String, T>(),
+      );
+    } else {
+      return InfoPlatformData(
+        fallback: data,
+      );
+    }
   }
 
   T get value => _platformData?[InfoKit.platform] ?? fallback;
