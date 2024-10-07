@@ -1,6 +1,6 @@
 name: info_kit
 description: Provides all basic info about your application. App flavor, Version, Device size, Flavor specific environment variables, and more.
-version: 1.3.0+4
+version: 1.4.0+5
 repository: https://github.com/zvikarp/info_kit
 
 environment:
