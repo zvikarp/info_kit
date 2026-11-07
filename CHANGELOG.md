@@ -1,3 +1,7 @@
+## 1.4.3
+
+* Fixed `InfoKit.init` reading `InfoKit.os` before `_os` is initialized.
+
 ## 1.4.0+5
 
 * Added some unit tests

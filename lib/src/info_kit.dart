@@ -49,10 +49,10 @@ class InfoKit {
     _appName = info.appName;
     _size = fallbackSize;
     _sizes = sizes;
+    _os = Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
     _platform = kIsWeb
         ? InfoPlatform.web
         : (os.name.toEnum(InfoPlatform.values) ?? InfoPlatform.unknown);
-    _os = Platform.operatingSystem.toEnum(InfoOS.values) ?? InfoOS.unknown;
 
     if (flavorEnabled) {
       // as there is no built in flavor support for web, we pass the flavor on
